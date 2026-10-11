@@ -36,8 +36,13 @@ UPDATE_PACKAGE() {
 
 	# 处理克隆的仓库
 	if [[ "$PKG_SPECIAL" == "pkg" ]]; then
-		find $REPO_PATH/*/ -maxdepth 3 -type d -iname "*$PKG_NAME*" -prune -exec cp -rf {} ./package \;
-		rm -rf $REPO_PATH
+		# pkg 模式：仓库可能为多包结构，提取含包名的子目录到 ./package/。
+		# 先把 clone 仓库移到临时目录，避免提取的子目录与 clone 目标同名时 cp 嵌套覆盖
+		# （如 argon/quickfile 等仓库根目录与包同名，导致根包未注册、编译期依赖缺失）
+		local TMPDIR="./package/.$REPO_NAME-src"
+		mv "$REPO_PATH" "$TMPDIR" 2>/dev/null
+		find "$TMPDIR" -mindepth 1 -maxdepth 3 -type d -iname "*$PKG_NAME*" -prune -exec cp -rf {} ./package \;
+		rm -rf "$TMPDIR"
 	fi
 }
 
