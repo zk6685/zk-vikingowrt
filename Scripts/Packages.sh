@@ -77,6 +77,8 @@ UPDATE_PACKAGE "kucat-config" "sirpdboy/luci-app-kucat-config" "master"
 UPDATE_PACKAGE "shadcn" "eamonxg/luci-theme-shadcn" "main"
 # luci-app-dockerman(Docker 增强管理界面,支持容器/镜像/网络/卷管理)
 UPDATE_PACKAGE "luci-app-dockerman" "lisaac/luci-app-dockerman" "master" "pkg"
+# luci-app-dockerman 上游 PKG_VERSION 带 v 前缀(v0.5.26),apk 包版本校验非法,去除 v 前缀
+sed -i 's/^PKG_VERSION:=v\([0-9]\)/PKG_VERSION:=\1/' ./package/luci-app-dockerman/Makefile
 
 UPDATE_PACKAGE "momo" "nikkinikki-org/OpenWrt-momo" "main"
 UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
