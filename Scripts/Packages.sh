@@ -355,6 +355,11 @@ function istore_backend()
   sock:close()
 end
 LUAEOF
+# libdaemon 修复：当前 owrt snapshot 的 feeds 中 libdaemon 包注册异常（avahi 等依赖它导致编译失败），
+# 从 immortalwrt/packages master 拉取正常 Makefile 放到 ./package/，并删除 feeds 中的异常目录
+rm -rf ./feeds/packages/libs/libdaemon
+mkdir -p ./package/libdaemon
+curl -fsSL "https://raw.githubusercontent.com/immortalwrt/packages/master/libs/libdaemon/Makefile" -o ./package/libdaemon/Makefile
 # daed 处理：删除 daed 对不存在的 vmlinux-btf 的条件依赖；并在 daed install 段追加软链，
 # 把 v2ray 的 geoip.dat/geosite.dat 装入 /usr/share/daed/。
 # (luci-app-daede 依赖 dae/daed，其 DEPENDS 不含 daed-geoip/daed-geosite，无需 sed 处理)
