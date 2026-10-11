@@ -75,11 +75,9 @@ UPDATE_PACKAGE "footstrap" "VizzleTF/luci-theme-footstrap" "main"
 UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "master"
 UPDATE_PACKAGE "kucat-config" "sirpdboy/luci-app-kucat-config" "master"
 UPDATE_PACKAGE "shadcn" "eamonxg/luci-theme-shadcn" "main"
-# luci-app-dockerman(Docker 增强管理界面,支持容器/镜像/网络/卷管理)
-UPDATE_PACKAGE "luci-app-dockerman" "lisaac/luci-app-dockerman" "master" "pkg"
-# luci-app-dockerman 上游 PKG_VERSION 带 v 前缀(v0.5.26),apk 包版本校验非法,去除 v 前缀
-sed -i 's/^PKG_VERSION:=v\([0-9]\)/PKG_VERSION:=\1/' ./package/luci-app-dockerman/Makefile
-# luci-lib-docker(luci-app-dockerman 依赖;immortalwrt/luci 与 small-package 均未收录,独立维护于 sbwml)
+# luci-app-dockerman-js(Docker 增强管理界面,LuCI2/JS 前端,sbwml 维护,支持容器/镜像/网络/卷;替换 lua 版)
+UPDATE_PACKAGE "luci-app-dockerman" "sbwml/luci-app-dockerman" "openwrt-25.12"
+# luci-lib-docker(保留;官方 luci-app-docker 等可能需要;独立维护于 sbwml)
 UPDATE_PACKAGE "luci-lib-docker" "sbwml/luci-lib-docker" "main"
 
 UPDATE_PACKAGE "momo" "nikkinikki-org/OpenWrt-momo" "main"
