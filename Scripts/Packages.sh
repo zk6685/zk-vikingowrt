@@ -79,6 +79,8 @@ UPDATE_PACKAGE "shadcn" "eamonxg/luci-theme-shadcn" "main"
 UPDATE_PACKAGE "luci-app-dockerman" "lisaac/luci-app-dockerman" "master" "pkg"
 # luci-app-dockerman 上游 PKG_VERSION 带 v 前缀(v0.5.26),apk 包版本校验非法,去除 v 前缀
 sed -i 's/^PKG_VERSION:=v\([0-9]\)/PKG_VERSION:=\1/' ./package/luci-app-dockerman/Makefile
+# luci-lib-docker(luci-app-dockerman 依赖;immortalwrt/luci 与 small-package 均未收录,独立维护于 sbwml)
+UPDATE_PACKAGE "luci-lib-docker" "sbwml/luci-lib-docker" "main"
 
 UPDATE_PACKAGE "momo" "nikkinikki-org/OpenWrt-momo" "main"
 UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
