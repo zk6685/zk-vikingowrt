@@ -75,6 +75,8 @@ UPDATE_PACKAGE "footstrap" "VizzleTF/luci-theme-footstrap" "main"
 UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "master"
 UPDATE_PACKAGE "kucat-config" "sirpdboy/luci-app-kucat-config" "master"
 UPDATE_PACKAGE "shadcn" "eamonxg/luci-theme-shadcn" "main"
+# luci-app-dockerman(Docker 增强管理界面,支持容器/镜像/网络/卷管理)
+UPDATE_PACKAGE "luci-app-dockerman" "lisaac/luci-app-dockerman" "master" "pkg"
 
 UPDATE_PACKAGE "momo" "nikkinikki-org/OpenWrt-momo" "main"
 UPDATE_PACKAGE "nikki" "nikkinikki-org/OpenWrt-nikki" "main"
