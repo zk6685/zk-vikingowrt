@@ -117,6 +117,8 @@ UPDATE_PACKAGE "qmodem-generic" "LianXia233/luci-app-qmodem-generic" "main"
 
 #daede(istore整合管理界面) + dae + daed，改用 kenzok8/small-package
 SMALLPKG "luci-app-daede dae daed"
+#lucky(Lucky 动态域名/DDNS + 端口转发 + 反代, luci 界面 + 主程序)
+SMALLPKG "luci-app-lucky lucky"
 #istore 商店 + istorex 首页及其依赖（均来自 small-package；补 quickstart/luci-lib-xterm 以满足 luci-app-quickstart 与 luci-lib-taskd 的依赖）
 SMALLPKG "luci-app-istorex luci-app-store luci-app-quickstart luci-lib-taskd luci-lib-iform taskd quickstart luci-lib-xterm"
 # quickstart 温度修复：替换 istore_backend.lua，为 /istore/system/status/ 响应注入 cpuTemperature（读 /sys/class/thermal/thermal_zone0/temp）

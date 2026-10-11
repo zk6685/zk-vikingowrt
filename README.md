@@ -17,6 +17,8 @@
 
 **代理 / DNS**：`luci-app-daede`（dae+daed）、`luci-app-openclash`、`luci-app-nikki`、`luci-app-homeproxy`、`luci-app-mosdns`、`luci-app-gecoosac`、`luci-app-openlist2`
 
+**网络 / DDNS**：`luci-app-lucky`+`lucky`（动态域名 / 端口转发 / 反向代理）
+
 **Docker**：`luci-app-dockerman`、`luci-app-docker`、`luci-lib-docker`、`docker`、`dockerd`、`containerd`、`runc`、`tini`
 
 **istore**：`luci-app-istorex`、`luci-app-store`、`luci-app-quickstart`（含温度修复）、`taskd`、`luci-lib-taskd`、`luci-lib-iform`
@@ -28,6 +30,18 @@
 **系统 / 工具**：`luci-app-cpufreq`、`zram-swap`、`luci-app-vlmcsd`+`vlmcsd`、`luci-app-mosquitto`+`mosquitto-ssl`/`mosquitto-client-ssl`、`luci-app-quickfile`+`quickfile`、`luci-app-mini-diskmanager`、`luci-app-autoreboot`、`luci-app-partexp`、`luci-app-natmapt`、`luci-app-upnp`、`luci-app-wolultra`、`fullconenat`、`htop`、`iperf3`、`smartmontools`、`nvme-cli` 等
 
 **内核 / 驱动（关键项）**：`kmod-xdp-sockets-diag`、`kmod-veth`、`kmod-nft-tproxy`、`kmod-wireguard`、`kmod-bonding`、`kmod-nft-*` 系列、`kmod-usb-*` 系列、`kmod-fs-btrfs` / `kmod-fs-ksmbd`
+
+---
+
+## 界面截图
+
+**管理后台首页（istorex 风格）**：网络向导 / 局域网设备管理 / 网络测速 / 应用商店快捷入口，服务菜单集成 daede、OpenClash、Docker CE 容器、Dockerman、FileBrowser、Mosquitto、Nikki、Vlmcsd KMS 等，并展示网络流量、接口状态、磁盘信息与存储服务。
+
+![首页](docs/screenshots/home.png)
+
+**状态 / 概览页**：系统信息（型号 Link NN6000 v2、CPU/WiFi 温度、固件版本 `ImmortalWRT SNAPSHOT r0-336f769 ... / zk6685-26.10.11-16.04.33`、内核 6.18.55）、内存占用与磁盘空间状态。
+
+![状态概览](docs/screenshots/overview.png)
 
 ---
 
