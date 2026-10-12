@@ -5,25 +5,24 @@
 name: QCB-ALL
 
 #CI计划
-# 已停用：整个CI仅保留nn6000(QCA-ALL)，此工作流不再触发
-#on:
-#  #自动编译：当Auto-Clean运行完成后
-#  workflow_run:
-#    workflows: ["Auto-Clean"]
-#    types:
-#      - completed
-#  #手动编译
-#  workflow_dispatch:
-#    inputs:
-#      PACKAGE:
-#        description: '手动调整插件包，多个请用\n符号隔开。'
-#        required: false
-#        type: string
-#      TEST:
-#        description: '仅输出配置文件，不编译固件。'
-#        default: false
-#        required: false
-#        type: boolean
+on:
+  #自动编译：当Auto-Clean运行完成后
+  workflow_run:
+    workflows: ["Auto-Clean"]
+    types:
+      - completed
+  #手动编译
+  workflow_dispatch:
+    inputs:
+      PACKAGE:
+        description: '手动调整插件包，多个请用\n符号隔开。'
+        required: false
+        type: string
+      TEST:
+        description: '仅输出配置文件，不编译固件。'
+        default: false
+        required: false
+        type: boolean
 
 #CI权限
 permissions: write-all
