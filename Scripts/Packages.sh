@@ -75,8 +75,8 @@ UPDATE_PACKAGE "footstrap" "VizzleTF/luci-theme-footstrap" "main"
 UPDATE_PACKAGE "kucat" "sirpdboy/luci-theme-kucat" "master"
 UPDATE_PACKAGE "kucat-config" "sirpdboy/luci-app-kucat-config" "master"
 UPDATE_PACKAGE "shadcn" "eamonxg/luci-theme-shadcn" "main"
-# luci-app-dockerman-js(Docker 增强管理界面,LuCI2/JS 前端,sbwml 维护,支持容器/镜像/网络/卷;替换 lua 版)
-UPDATE_PACKAGE "luci-app-dockerman" "sbwml/luci-app-dockerman" "openwrt-25.12"
+# luci-app-dockerman-js(Docker 增强管理界面,LuCI2/JS 前端,菜单"Dockerman JS",catsimple 维护;支持容器/镜像/网络/卷)
+UPDATE_PACKAGE "luci-app-dockerman-js" "catsimple/luci-app-dockerman-js" "main"
 # luci-lib-docker(保留;官方 luci-app-docker 等可能需要;独立维护于 sbwml)
 UPDATE_PACKAGE "luci-lib-docker" "sbwml/luci-lib-docker" "main"
 
