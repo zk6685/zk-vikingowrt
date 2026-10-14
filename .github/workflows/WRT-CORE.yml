@@ -192,6 +192,18 @@ jobs:
           # avahi 依赖 libdaemon,该包在当前 snapshot feeds 未注册;禁用以避免编译失败(mDNS服务发现,非必需)
           echo 'CONFIG_PACKAGE_avahi=n' >> .config
 
+      - name: Free Disk Space (release runner storage before compile)
+        if: ${{ !inputs.WRT_TEST }}
+        uses: jlumbroso/free-disk-space@main
+        with:
+          android: true
+          dotnet: true
+          haskell: true
+          large-packages: true
+          docker-images: true
+          swap-storage: true
+          tool-cache: false
+
       - name: Download Packages
         if: ${{ !inputs.WRT_TEST }}
         run: |
