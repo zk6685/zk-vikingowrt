@@ -2,6 +2,21 @@
 # SPDX-License-Identifier: MIT
 # Copyright (C) 2026 VIKINGYFY
 
+#从 kenzok8/small-package 一次性提取多个指定包到 ./package/（避免多次 clone 大仓库）
+SMALLPKG() {
+	local PKGS="$1"
+	local REPO_PATH="./package/small-package"
+	#删除 feeds 中可能与提取包冲突的同名包
+	for NAME in $PKGS; do
+		find ./feeds/luci/ ./feeds/packages/ -maxdepth 4 -type d -iname "*$NAME*" -exec rm -rf {} \; 2>/dev/null
+	done
+	git clone --depth=1 --single-branch --branch main "https://github.com/kenzok8/small-package.git" $REPO_PATH
+	for NAME in $PKGS; do
+		cp -rf $REPO_PATH/$NAME ./package/ 2>/dev/null
+	done
+	rm -rf $REPO_PATH
+}
+
 #安装和更新软件包
 UPDATE_PACKAGE() {
 	local PKG_NAME=$1
@@ -135,6 +150,12 @@ UPDATE_VERSION() {
 
 #UPDATE_VERSION "软件包名" "测试版，true，可选，默认为否"
 #UPDATE_VERSION "sing-box"
+
+# ===== 自定义新增：iStore 商店 + iStore 首页(quickstart)（本体）=====
+# iStore 商店/首页及其依赖，均来自 kenzok8/small-package
+SMALLPKG "luci-app-store luci-app-quickstart luci-lib-taskd luci-lib-iform taskd quickstart luci-lib-xterm"
+# honk 运行依赖：v2ray-geodata（提供 v2ray-geoip / v2ray-geosite 子包，honk DEPENDS 引用）
+UPDATE_PACKAGE "v2ray-geodata" "kenzok8/wall" "main"
 
 #引入私有扩展脚本
 if [ -f "$GITHUB_WORKSPACE/Scripts/PRIVATE.sh" ]; then
