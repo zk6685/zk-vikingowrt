@@ -136,8 +136,7 @@ CONFIG_PACKAGE_jshn=y
 CONFIG_PACKAGE_sqlite3-cli=y
 CONFIG_PACKAGE_usign=y
 CONFIG_PACKAGE_coreutils-stat=y
-CONFIG_PACKAGE_v2ray-geoip=y
-CONFIG_PACKAGE_v2ray-geosite=y
+# (v2ray-geoip / v2ray-geosite 体积较大，不编进固件；用户后期安装 honk 本体时由其 DEPENDS 自动拉取)
 # --- clouddrive2 运行依赖 ---
 CONFIG_PACKAGE_fuse-utils=y
 # --- dae/honk 所需内核 eBPF/BTF（CO-RE 运行前提）---

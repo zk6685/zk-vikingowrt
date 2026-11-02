@@ -154,8 +154,7 @@ UPDATE_VERSION() {
 # ===== 自定义新增：iStore 商店 + iStore 首页(quickstart)（本体）=====
 # iStore 商店/首页及其依赖，均来自 kenzok8/small-package
 SMALLPKG "luci-app-store luci-app-quickstart luci-lib-taskd luci-lib-iform taskd quickstart luci-lib-xterm"
-# honk 运行依赖：v2ray-geodata（提供 v2ray-geoip / v2ray-geosite 子包，honk DEPENDS 引用）
-UPDATE_PACKAGE "v2ray-geodata" "kenzok8/wall" "main"
+# (v2ray-geodata 源不拉：v2ray-geoip/geosite 不编进固件，用户后期装 honk 本体时由其 feed 自动拉取)
 
 #引入私有扩展脚本
 if [ -f "$GITHUB_WORKSPACE/Scripts/PRIVATE.sh" ]; then
