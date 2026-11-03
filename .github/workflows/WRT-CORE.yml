@@ -40,6 +40,9 @@ on:
       WRT_PACKAGE:
         required: false
         type: string
+      WRT_PREFIX:
+        required: false
+        type: string
       WRT_TEST:
         required: false
         default: false
@@ -58,6 +61,7 @@ env:
   WRT_BRANCH: ${{inputs.WRT_BRANCH}}
   WRT_SOURCE: ${{inputs.WRT_SOURCE}}
   WRT_PACKAGE: ${{inputs.WRT_PACKAGE}}
+  WRT_PREFIX: ${{inputs.WRT_PREFIX}}
   WRT_TEST: ${{inputs.WRT_TEST}}
 
 jobs:
@@ -275,11 +279,17 @@ jobs:
             for FILE in $(find ./bin/targets/ -type f -iname "*$WRT_TARGET*") ; do
               EXT=$(basename $FILE | cut -d '.' -f 2-)
               NAME=$(basename $FILE | cut -d '.' -f 1 | grep -io "\($WRT_TARGET\).*")
-              NEW_FILE="$NAME"-"$WRT_INFO"-"$WRT_BRANCH"-"$WRT_WIFI"-"$WRT_DATE"."$EXT"
+              NEW_FILE="${WRT_PREFIX}${NAME}"-"$WRT_INFO"-"$WRT_BRANCH"-"$WRT_WIFI"-"$WRT_DATE"."$EXT"
               mv -f $FILE ./upload/$NEW_FILE
             done
 
-            find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
+            if [ -n "$WRT_PREFIX" ]; then
+              for FILE in $(find ./bin/targets/ -type f); do
+                mv -f $FILE ./upload/"$WRT_PREFIX"$(basename $FILE)
+              done
+            else
+              find ./bin/targets/ -type f -exec mv -f {} ./upload/ \;
+            fi
 
             make clean -j$(nproc)
           fi

@@ -47,7 +47,7 @@ jobs:
       #默认主题
       WRT_THEME: vantage
       #默认主机名
-      WRT_NAME: daepon
+      WRT_NAME: DAEPON
       #默认WIFI名称
       WRT_SSID: OWRT
       #默认WIFI密码
@@ -56,6 +56,8 @@ jobs:
       WRT_IP: 192.168.10.1
       #默认密码，仅作提示，修改无用
       WRT_PW: 无
+      #固件文件名前缀
+      WRT_PREFIX: zk-daepon-
       #源码链接
       WRT_REPO: https://github.com/${{matrix.SOURCE}}.git
       #源码分支
