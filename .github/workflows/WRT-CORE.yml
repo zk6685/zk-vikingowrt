@@ -184,6 +184,9 @@ jobs:
         run: |
           cd ./wrt/
 
+          # nn6000 内核分区 6M -> 12M，容纳内置 BTF 大内核（IPQ60XX 默认 6M 会超限）
+          sed -i '/define Device\/link_nn6000-common/,/^endef/s/KERNEL_SIZE := 6144k/KERNEL_SIZE := 12288k/' target/linux/qualcommax/image/ipq60xx.mk
+
           if [[ "${WRT_CONFIG,,}" == *"test"* ]]; then
             cat $GITHUB_WORKSPACE/Config/$WRT_CONFIG.txt >> .config
           else
