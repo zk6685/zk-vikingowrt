@@ -202,6 +202,9 @@ jobs:
 
           make defconfig -j$(nproc) && make clean -j$(nproc)
 
+          # defconfig 会按默认重置隐藏的 CONFIG_BUSYBOX_CONFIG_DEVMEM(默认n), 在其后强制补回使busybox编译devmem(帧转发引擎/超频PLL读物理内存必需)
+          echo "CONFIG_BUSYBOX_CONFIG_DEVMEM=y" >> .config
+
       - name: Prepare Rust Toolchain
         if: ${{ !inputs.WRT_TEST }}
         run: |
