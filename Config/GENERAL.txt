@@ -162,4 +162,6 @@ CONFIG_PACKAGE_taskd=y
 CONFIG_PACKAGE_luci-app-ttyd=y
 CONFIG_PACKAGE_luci-app-quickfile=y
 CONFIG_PACKAGE_quickfile=y
+# devmem: 需同时设 DEFAULT_DEVMEM=y (busybox applet默认值) 否则 make defconfig 会按默认n覆盖掉 CONFIG_DEVMEM
+CONFIG_BUSYBOX_DEFAULT_DEVMEM=y
 CONFIG_BUSYBOX_CONFIG_DEVMEM=y
