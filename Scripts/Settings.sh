@@ -51,3 +51,12 @@ if [[ "${WRT_TARGET^^}" == *"QUALCOMMAX"* ]]; then
 		echo "qualcommax set up nowifi successfully!"
 	fi
 fi
+
+#强制启用busybox devmem(帧转发引擎/超频PLL需读物理内存)
+#根因: make defconfig 会按 Config-defaults.in 的默认值重置所有 CONFIG_BUSYBOX_* applet,
+#直接写 .config 里的 CONFIG_BUSYBOX_CONFIG_DEVMEM=y 会被覆盖为n, 故需改上游默认 BUSYBOX_DEFAULT_DEVMEM 为y
+BB_DEF="./package/utils/busybox/Config-defaults.in"
+if [ -f "$BB_DEF" ]; then
+	sed -i '/^config BUSYBOX_DEFAULT_DEVMEM$/{n;n;s/^\([[:space:]]*\)default n$/\1default y/}' "$BB_DEF"
+	echo "busybox devmem enabled (BUSYBOX_DEFAULT_DEVMEM=y)"
+fi
