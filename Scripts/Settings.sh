@@ -60,3 +60,25 @@ if [ -f "$BB_DEF" ]; then
 	sed -i '/^config BUSYBOX_DEFAULT_DEVMEM$/{n;n;s/^\([[:space:]]*\)default n$/\1default y/}' "$BB_DEF"
 	echo "busybox devmem enabled (BUSYBOX_DEFAULT_DEVMEM=y)"
 fi
+
+#关闭 nginx 80->https 强制跳转(http 可正常访问 LuCI)
+mkdir -p files/etc/uci-defaults
+cat > files/etc/uci-defaults/zz-nginx-http <<'INNER'
+#!/bin/sh
+[ -f /etc/config/nginx ] || exit 0
+if uci -q get nginx._redirect2ssl >/dev/null 2>&1; then
+	uci -q delete nginx._redirect2ssl
+fi
+if ! uci -q get nginx._lan.listen 2>/dev/null | grep -qx '80'; then
+	uci -q add_list nginx._lan.listen='80'
+fi
+if ! uci -q get nginx._lan.listen 2>/dev/null | grep -qx '\[::\]:80'; then
+	uci -q add_list nginx._lan.listen='[::]:80'
+fi
+if [ -n "$(uci -q changes nginx)" ]; then
+	uci -q commit nginx
+	/etc/init.d/nginx restart >/dev/null 2>&1 || true
+fi
+exit 0
+INNER
+chmod +x files/etc/uci-defaults/zz-nginx-http
