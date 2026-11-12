@@ -1,5 +1,6 @@
 #科学插件调整
-CONFIG_PACKAGE_luci-app-homeproxy=y
+#Homeproxy 在本固件下功能异常，不再编译进固件；改由用户后期自行安装插件本体
+CONFIG_PACKAGE_luci-app-homeproxy=n
 #增加插件
 CONFIG_PACKAGE_luci-app-autoreboot=y
 CONFIG_PACKAGE_luci-app-gecoosac=y
