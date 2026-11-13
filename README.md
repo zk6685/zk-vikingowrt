@@ -48,6 +48,95 @@
 - 固件文件名：`zk-daepon-<target>-<device>-<镜像类型>-<源码>-<分支>-<WIFI>-<日期>.<扩展名>`
 - 每次编译同时上传 `Config-*.txt`，可据此核对实际生效的配置
 
+## 机型支持清单
+
+`ALL_PROFILES` 表示该 target 下上游支持的全部设备一次性出包；`WIFI-YES` / `WIFI-NO` 为同一套设备定义，差别只在是否编入无线驱动与固件包。
+
+| 平台 | 配置文件 | target / subtarget | 机型数 |
+| --- | --- | --- | --- |
+| Airoha | `AIROHA-AN7581` | `airoha/an7581` | 全量（`ALL_PROFILES`） |
+| Airoha | `AIROHA-AN7583` | `airoha/an7583` | 全量（`ALL_PROFILES`） |
+| Qualcomm | `IPQ53XX` | `qualcommbe/ipq53xx` | 5 |
+| Qualcomm | `IPQ60XX-WIFI-YES` / `-NO` | `qualcommax/ipq60xx` | 13 |
+| Qualcomm | `IPQ807X-WIFI-YES` / `-NO` | `qualcommax/ipq807x` | 12 |
+| Qualcomm | `IPQ95XX` | `qualcommbe/ipq95xx` | 6 |
+| MediaTek | `MEDIATEK-WIFI-YES` | `mediatek/filogic` | 70 |
+| MediaTek | `MEDIATEK-WIFI-NO` | `mediatek/filogic` | 4 |
+| Rockchip | `ROCKCHIP` | `rockchip/armv8` | 26 |
+| x86 | `X86` | `x86/64` | 全量（`ALL_PROFILES`） |
+| 测试 | `TEST` | `qualcommax/ipq50xx` | 1 |
+
+### Airoha（主线）
+
+- `AIROHA-AN7581`：`airoha/an7581` 全部设备，固件内置 `luci-app-airoha-npu`（芯片状态页）
+- `AIROHA-AN7583`：`airoha/an7583` 全部设备，同上
+- 已实测出包机型：Nokia XG-040G-MD、FiberHome HG5585F-CT
+
+### Qualcomm IPQ53xx（5 款）
+
+```text
+jdcloud_re-cs-06 jdcloud_re-cs-08 xiaomi_be3600-pro-wired-p5 xiaomi_be3600-pro-wired-p8 xiaomi_be6500
+```
+
+### Qualcomm IPQ60xx（13 款）
+
+```text
+qihoo_360v6 anysafe_e1 cmiot_ax18 dptech_ap3000-2c glinet_gl-ax1800 glinet_gl-axt1800
+link_nn6000-v1 link_nn6000-v2 linksys_mr7350 linksys_mr7500 redmi_ax5 xiaomi_ax1800
+zn_m2
+```
+
+### Qualcomm IPQ807x（12 款）
+
+```text
+aliyun_ap8220 dynalink_dl-wrx36 linksys_homewrk linksys_mx4300 qnap_301w redmi_ax6
+redmi_ax6-stock verizon_cr1000a xiaomi_ax3600 xiaomi_ax3600-stock xiaomi_ax9000 xiaomi_ax9000-stock
+```
+
+### Qualcomm IPQ95xx（6 款）
+
+```text
+askey_sbe1v1k nokia_beacon10 xiaomi_be7000 xiaomi_be7000-pro xiaomi_be10000 xiaomi_be10000-pro
+```
+
+### MediaTek filogic · WIFI-YES（70 款）
+
+```text
+abt_asr3000 airpi_ap3000m asus_tuf-ax4200 asus_tuf-ax4200q asus_tuf-ax6000 cetron_ct3003-stock
+cetron_ct3003-ubootmod cmcc_a10-stock cmcc_a10-ubootmod cmcc_rax3000m cmcc_rax3000me comfast_cf-e393ax
+comfast_cf-wr632ax comfast_cf-wr632ax-ubootmod comfast_cf-xr186 creatlentem_clt-r30b1 creatlentem_clt-r30b1-112m cudy_tr3000-v1
+cudy_tr3000-v1-256mb cudy_tr3000-v1-ubootmod glinet_gl-mt3000 glinet_gl-mt3600be glinet_gl-mt6000 glinet_gl-x3000
+glinet_gl-xe3000 globitel_bt-r320 h3c_magic-nx30-pro-ubootmod huasifei_wh3000-emmc huasifei_wh3000-pro-emmc huasifei_wh3000-pro-nand
+imou_hx21 jcg_q30-pro jdcloud_re-cp-03 konka_komi-a31 netcore_n60 netcore_n60-pro
+nokia_ea0326gmp qihoo_360t7 qihoo_360t7-ubi ruijie_rg-x60 ruijie_rg-x60-pro supergateway_s20l
+supergateway_s20p tenda_be12-pro tplink_tl-7dr7230-v1 tplink_tl-7dr7230-v2 tplink_tl-7dr7250-v1 tplink_tl-7dr7299-v1
+tplink_tl-xdr4288 tplink_tl-xdr6086 tplink_tl-xdr6088 tplink_tl-xtr8488 tplink_wma301-v2-1-256m-ubootmod tplink_wma301-v2-1-ubootmod
+tplink_wma301-v2-256m-ubootmod tplink_wma301-v2-ubootmod xiaomi_mi-router-ax3000t-stock xiaomi_mi-router-ax3000t-ubootmod xiaomi_mi-router-wr30u-stock xiaomi_mi-router-wr30u-ubootmod
+xiaomi_redmi-router-ax6000-stock xiaomi_redmi-router-ax6000-ubootmod zbtlink_zbt-z8102ax zbtlink_zbt-z8102ax-v2 zbtlink_zbt-z8103ax zbtlink_zbt-z8103ax-c
+zbtlink_zbt-z8106ax-s zbtlink_zbt-z8106ax-t zbtlink_zbt-z8803be zyxel_ex5700-telenor
+```
+
+### MediaTek filogic · WIFI-NO（4 款）
+
+```text
+supergateway_s20l supergateway_s20m supergateway_s20p zyxel_ex5700-telenor
+```
+
+### Rockchip armv8（26 款）
+
+```text
+ezpro_mrkaio-m68s friendlyarm_nanopc-t4 friendlyarm_nanopc-t6 friendlyarm_nanopi-m5 friendlyarm_nanopi-r2c friendlyarm_nanopi-r2c-plus
+friendlyarm_nanopi-r2s friendlyarm_nanopi-r3s friendlyarm_nanopi-r4s friendlyarm_nanopi-r4se friendlyarm_nanopi-r4s-enterprise friendlyarm_nanopi-r5c
+friendlyarm_nanopi-r5s friendlyarm_nanopi-r6c friendlyarm_nanopi-r6s friendlyarm_nanopi-r76s linkease_easepi-r1 lunzn_fastrhino-r66s
+lunzn_fastrhino-r68s radxa_e20c radxa_e25 radxa_e52c xunlong_orangepi-5 xunlong_orangepi-5-plus
+xunlong_orangepi-r1-plus xunlong_orangepi-r1-plus-lts
+```
+
+### 其他
+
+- `X86`：`x86/64` 全部 profile，输出 `grub` 与 `vmdk` 镜像，内置 `mt7915/7921/7925` 无线驱动
+- `TEST`：`qualcommax/ipq50xx` 的 `cmcc_mr3000d-ci`，仅用于验证配置
+
 ## 固件特点
 
 ### 基础信息
