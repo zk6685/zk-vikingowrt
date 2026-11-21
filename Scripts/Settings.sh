@@ -82,3 +82,24 @@ fi
 exit 0
 INNER
 chmod +x files/etc/uci-defaults/zz-nginx-http
+
+#移植 AN7581 PPE IPv6 PPPoE 硬件流卸载修复(931，依赖上游已有的 930 L2B 布局修复)
+#根因: L3 IPv6 路由报文在 foe_flow 查不到时无条件跌入 l2_lookup -> 被当成 L2 子流提交,
+#      src_mac_hi 被 0xf 抹掉 PPPoE Session ID, PSE_PORT 又被改写为 6(NPU) -> 硬件管线死锁,
+#      IPv6 下行从满速跌到几十 KB/s (阿里 CDN/夸克网盘等 br-lan 下行场景)
+#保护: 补丁经 target/linux/airoha/patches-6.18 的 quilt 序列自动应用, 上下文不匹配会在
+#      kernel prepare 阶段直接报错中止编译, 不会带病出包
+PATCH_SRC="$GITHUB_WORKSPACE/Scripts/patches/931-net-airoha-fix-wan-ipv6-pppoe-flow-offload.patch"
+PATCH_DIR="./target/linux/airoha/patches-6.18"
+PATCH_NAME="931-net-airoha-fix-wan-ipv6-pppoe-flow-offload.patch"
+if [[ "${WRT_TARGET^^}" == *AIROHA* ]] && [ -f "$PATCH_SRC" ] && [ -d "$PATCH_DIR" ]; then
+	if [ -f "$PATCH_DIR/$PATCH_NAME" ]; then
+		echo "airoha 931 patch already present upstream, skip"
+	else
+		for token in "PPE_PKT_TYPE_IPV6_ROUTE_3T" "AIROHA_FOE_MAC_PPPOE_ID" "l2_lookup:" "WAN_MTU1_MASK"; do
+			grep -q "$token" "$PATCH_SRC" || { echo "ERROR: 931 patch incomplete (missing $token)"; exit 1; }
+		done
+		cp -f "$PATCH_SRC" "$PATCH_DIR/$PATCH_NAME"
+		echo "airoha 931 IPv6 PPPoE PPE offload fix installed"
+	fi
+fi

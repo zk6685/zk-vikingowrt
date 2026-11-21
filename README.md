@@ -147,6 +147,7 @@ xunlong_orangepi-r1-plus xunlong_orangepi-r1-plus-lts
 ### 关键定制
 
 - **devmem 编入固件**：`Config/GENERAL.txt` 设置 `CONFIG_BUSYBOX_DEFAULT_DEVMEM=y`、`CONFIG_BUSYBOX_CONFIG_DEVMEM=y`，并在 `make defconfig` 之后强制补回 `CONFIG_BUSYBOX_CONFIG_DEVMEM=y`。芯片状态页的帧转发引擎、PSE 队列、PPE、超频 PLL 等寄存器读取都依赖它。
+- **IPv6 PPPoE 硬件卸载修复**：内置 `Scripts/patches/931-net-airoha-fix-wan-ipv6-pppoe-flow-offload.patch`，编译 AIROHA 配置时自动装入 `target/linux/airoha/patches-6.18/`。修复 L3 IPv6 路由报文跌入 L2 子流后被抹掉 PPPoE Session ID、`PSE_PORT` 被改写到 NPU 导致的下行死锁（表现为 IPv6 下行从满速跌到几十 KB/s）。
 - **关闭 HTTP 到 HTTPS 的强制跳转**：首次启动通过 `/etc/uci-defaults/zz-nginx-http` 删除 nginx 的 `_redirect2ssl` server 段，并把 80 端口并入 `_lan`，`http://` 可直接访问 LuCI；`uhttpd` 的重定向同样保持关闭。
 - **不编译 Homeproxy**：`Config/GENERAL.txt` / `Config/TEST.txt` 中 `CONFIG_PACKAGE_luci-app-homeproxy=n`，需要时由用户自行安装（连带 `sing-box` 依赖）。
 - **eBPF / BTF 内核**：启用 `CONFIG_KERNEL_DEBUG_INFO_BTF`、`CONFIG_KERNEL_CGROUP_BPF`、`CONFIG_KERNEL_XDP_SOCKETS` 等，作为 dae / honk 的 CO-RE 运行前提；内置 BTF 使内核增大约 7.3 MB，`nn6000` 的内核分区已从 6M 调到 12M，6M 分区的机型未采用该方案。
