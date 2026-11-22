@@ -146,7 +146,7 @@ xunlong_orangepi-r1-plus xunlong_orangepi-r1-plus-lts
 
 ### 关键定制
 
-- **devmem 编入固件**：`Config/GENERAL.txt` 设置 `CONFIG_BUSYBOX_DEFAULT_DEVMEM=y`、`CONFIG_BUSYBOX_CONFIG_DEVMEM=y`，并在 `make defconfig` 之后强制补回 `CONFIG_BUSYBOX_CONFIG_DEVMEM=y`。芯片状态页的帧转发引擎、PSE 队列、PPE、超频 PLL 等寄存器读取都依赖它。
+- **devmem 可用**：`Config/GENERAL.txt` 开启 busybox 的 `devmem` applet（`CONFIG_BUSYBOX_DEFAULT_DEVMEM=y`、`CONFIG_BUSYBOX_CONFIG_DEVMEM=y`，并在 `make defconfig` 后强制补回）；`Config/AIROHA-AN7581.txt` / `Config/AIROHA-AN7583.txt` 另开内核 `CONFIG_KERNEL_DEVMEM=y`，否则 `/sys/class/mem` 里不会注册 `mem`，`/dev/mem` 打不开（ENXIO），帧转发引擎页的 PSE 共享缓冲区、GDM/CDM 计数器会全部显示 0。
 - **IPv6 PPPoE 硬件卸载修复**：内置 `Scripts/patches/931-net-airoha-fix-wan-ipv6-pppoe-flow-offload.patch`，编译 AIROHA 配置时自动装入 `target/linux/airoha/patches-6.18/`。修复 L3 IPv6 路由报文跌入 L2 子流后被抹掉 PPPoE Session ID、`PSE_PORT` 被改写到 NPU 导致的下行死锁（表现为 IPv6 下行从满速跌到几十 KB/s）。
 - **关闭 HTTP 到 HTTPS 的强制跳转**：首次启动通过 `/etc/uci-defaults/zz-nginx-http` 删除 nginx 的 `_redirect2ssl` server 段，并把 80 端口并入 `_lan`，`http://` 可直接访问 LuCI；`uhttpd` 的重定向同样保持关闭。
 - **不编译 Homeproxy**：`Config/GENERAL.txt` / `Config/TEST.txt` 中 `CONFIG_PACKAGE_luci-app-homeproxy=n`，需要时由用户自行安装（连带 `sing-box` 依赖）。

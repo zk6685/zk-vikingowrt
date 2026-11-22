@@ -103,3 +103,17 @@ if [[ "${WRT_TARGET^^}" == *AIROHA* ]] && [ -f "$PATCH_SRC" ] && [ -d "$PATCH_DI
 		echo "airoha 931 IPv6 PPPoE PPE offload fix installed"
 	fi
 fi
+
+#airoha: 兜底确保 /dev/mem 节点存在(内核 DEVMEM 打开后 /sys/class/mem/mem 才会出现,
+#正常由 procd/mdev 自动建节点, 这里只在内核已注册但节点缺失时手动补)
+if [[ "${WRT_TARGET^^}" == *AIROHA* ]]; then
+	mkdir -p files/etc/uci-defaults
+	cat > files/etc/uci-defaults/zz-airoha-devmem <<'INNER'
+#!/bin/sh
+[ -e /dev/mem ] && exit 0
+[ -e /sys/class/mem/mem/dev ] || exit 0
+mknod /dev/mem c 1 1 2>/dev/null && chmod 640 /dev/mem
+exit 0
+INNER
+	chmod +x files/etc/uci-defaults/zz-airoha-devmem
+fi
