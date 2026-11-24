@@ -96,6 +96,39 @@ cat > files/etc/nginx/conf.d/00-absolute_redirect.conf <<'INNER'
 absolute_redirect off;
 INNER
 
+#restrict_locally 拒绝访问(403)时返回可读说明页, 白名单限制本身不变
+#判断方法写进页面: 内网可开、外网返回 403 -> 即被 /etc/nginx/restrict_locally 拦截
+mkdir -p files/www
+cat > files/www/403-locally.html <<'INNER'
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>403 访问受限</title></head>
+<body style="font-family:system-ui,'Microsoft YaHei',sans-serif;max-width:640px;margin:64px auto;padding:0 20px;line-height:1.9;color:#333">
+<h2 style="margin:0 0 4px">403 · 访问受限</h2>
+<p style="color:#888;font-size:13px;margin:0 0 20px">当前来源地址不在 nginx 白名单内，管理界面只允许内网访问。</p>
+<p><b>怎么判断是这个问题：</b>内网 http://192.168.2.1 能正常打开，而通过公网 IP 加端口访问返回 403，
+就是 /etc/nginx/restrict_locally 里的 allow/deny 规则拦下的（不是密码错，也不是端口没通）。</p>
+<p><b>怎么处理：</b></p>
+<ol>
+<li>平时用内网地址访问，或通过 Tailscale / WireGuard 回家后再访问；</li>
+<li>确实要从外网直连：编辑 /etc/nginx/restrict_locally，在 deny all; 之前加一行
+<code style="background:#eee;padding:1px 5px">allow 你的公网IP;</code>，保存后执行
+<br><code style="background:#eee;padding:1px 5px">nginx -t -c /etc/nginx/uci.conf &amp;&amp; /etc/init.d/nginx reload</code></li>
+</ol>
+<p style="color:#aaa;font-size:12px;margin-top:28px">ImmortalWrt · nginx 1.30.5</p>
+</body></html>
+INNER
+
+cat > files/etc/nginx/conf.d/99-locally-403.locations <<'INNER'
+# restrict_locally 拒绝访问时返回说明页（allow/deny 规则本身不变）
+error_page 403 =403 /403-locally.html;
+location = /403-locally.html {
+	allow all;
+	internal;
+}
+INNER
+
 #移植 AN7581 PPE IPv6 PPPoE 硬件流卸载修复(931，依赖上游已有的 930 L2B 布局修复)
 #根因: L3 IPv6 路由报文在 foe_flow 查不到时无条件跌入 l2_lookup -> 被当成 L2 子流提交,
 #      src_mac_hi 被 0xf 抹掉 PPPoE Session ID, PSE_PORT 又被改写为 6(NPU) -> 硬件管线死锁,
