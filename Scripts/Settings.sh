@@ -89,8 +89,9 @@ chmod +x files/etc/uci-defaults/zz-nginx-http
 #     端口则取本机监听端口(80), 于是 WAN 8088->80 转发访问时被跳到 http://<外网IP>/cgi-bin/luci/,
 #     8088 丢失后连接被墙/无监听 -> 打不开
 #修复: 关闭绝对重定向, Location 保持相对, 浏览器按原地址(含 8088)继续请求
+#位置: uci.conf 第 ~50 行在 http 上下文 include conf.d/*.conf, 故用 .conf 后缀对全部 server 生效
 mkdir -p files/etc/nginx/conf.d
-cat > files/etc/nginx/conf.d/00-absolute-redirect.locations <<'INNER'
+cat > files/etc/nginx/conf.d/00-absolute_redirect.conf <<'INNER'
 # keep Location relative, so an external port (e.g. WAN 8088 -> 80) is not dropped
 absolute_redirect off;
 INNER
