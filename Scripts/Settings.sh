@@ -83,6 +83,18 @@ exit 0
 INNER
 chmod +x files/etc/uci-defaults/zz-nginx-http
 
+#关闭 nginx 绝对重定向, 保留外网端口转发场景下的端口号
+#根因: 包内 conf.d/luci.locations 写的是相对跳转 `return 302 /cgi-bin/luci/;`,
+#     nginx 默认 absolute_redirect=on 会把它补成绝对 URL, 主机名取 Host 头(不含端口),
+#     端口则取本机监听端口(80), 于是 WAN 8088->80 转发访问时被跳到 http://<外网IP>/cgi-bin/luci/,
+#     8088 丢失后连接被墙/无监听 -> 打不开
+#修复: 关闭绝对重定向, Location 保持相对, 浏览器按原地址(含 8088)继续请求
+mkdir -p files/etc/nginx/conf.d
+cat > files/etc/nginx/conf.d/00-absolute-redirect.locations <<'INNER'
+# keep Location relative, so an external port (e.g. WAN 8088 -> 80) is not dropped
+absolute_redirect off;
+INNER
+
 #移植 AN7581 PPE IPv6 PPPoE 硬件流卸载修复(931，依赖上游已有的 930 L2B 布局修复)
 #根因: L3 IPv6 路由报文在 foe_flow 查不到时无条件跌入 l2_lookup -> 被当成 L2 子流提交,
 #      src_mac_hi 被 0xf 抹掉 PPPoE Session ID, PSE_PORT 又被改写为 6(NPU) -> 硬件管线死锁,
