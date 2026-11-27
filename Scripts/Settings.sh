@@ -129,6 +129,27 @@ location = /403-locally.html {
 }
 INNER
 
+#打开 xtables / ipset 内核开关(mwan3 依赖链需要; mwan3 本体不编, 由用户自行安装)
+#根因: target/linux/generic/config-6.18 里 NETFILTER_XTABLES / IP_NF_IPTABLES /
+#     IP6_NF_IPTABLES / IP_SET 都是 "# ... is not set", 于是 kmod-ipt-core、
+#     kmod-ip6tables、kmod-ipt-ipset、kmod-nft-compat 在 menuconfig 里全部不可选,
+#     LuCI 软件包页会显示"不可用/所有仓库都未提供"
+#做法: 在 airoha 的 target config 里覆盖为 =y; 统一走 iptables-nft 后端(与 fw4 的 nf_tables 同栈),
+#     不开 iptables-legacy(legacy ip_tables 与 nft 并行会更重, 也无必要)
+AIROHA_KCFG="./target/linux/airoha/config-6.18"
+if [[ "${WRT_TARGET^^}" == *AIROHA* ]] && [ -f "$AIROHA_KCFG" ]; then
+	for kv in CONFIG_NETFILTER_XTABLES CONFIG_IP_NF_IPTABLES CONFIG_IP6_NF_IPTABLES CONFIG_IP_SET; do
+		if grep -q "^${kv}=" "$AIROHA_KCFG"; then
+			sed -i "s|^${kv}=.*|${kv}=y|" "$AIROHA_KCFG"
+		elif grep -q "^# ${kv} is not set" "$AIROHA_KCFG"; then
+			sed -i "s|^# ${kv} is not set|${kv}=y|" "$AIROHA_KCFG"
+		else
+			echo "${kv}=y" >> "$AIROHA_KCFG"
+		fi
+	done
+	echo "xtables/ipset kernel options enabled (mwan3 dependencies)"
+fi
+
 #移植 AN7581 PPE IPv6 PPPoE 硬件流卸载修复(931，依赖上游已有的 930 L2B 布局修复)
 #根因: L3 IPv6 路由报文在 foe_flow 查不到时无条件跌入 l2_lookup -> 被当成 L2 子流提交,
 #      src_mac_hi 被 0xf 抹掉 PPPoE Session ID, PSE_PORT 又被改写为 6(NPU) -> 硬件管线死锁,

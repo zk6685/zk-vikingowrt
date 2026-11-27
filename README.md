@@ -151,6 +151,7 @@ xunlong_orangepi-r1-plus xunlong_orangepi-r1-plus-lts
 - **关闭 HTTP 到 HTTPS 的强制跳转**：首次启动通过 `/etc/uci-defaults/zz-nginx-http` 删除 nginx 的 `_redirect2ssl` server 段，并把 80 端口并入 `_lan`，`http://` 可直接访问 LuCI；`uhttpd` 的重定向同样保持关闭。
 - **不编译 Homeproxy**：`Config/GENERAL.txt` / `Config/TEST.txt` 中 `CONFIG_PACKAGE_luci-app-homeproxy=n`，需要时由用户自行安装（连带 `sing-box` 依赖）。
 - **eBPF / BTF 内核**：启用 `CONFIG_KERNEL_DEBUG_INFO_BTF`、`CONFIG_KERNEL_CGROUP_BPF`、`CONFIG_KERNEL_XDP_SOCKETS` 等，作为 dae / honk 的 CO-RE 运行前提；内置 BTF 使内核增大约 7.3 MB，`nn6000` 的内核分区已从 6M 调到 12M，6M 分区的机型未采用该方案。
+- **mwan3 依赖内置**：`Config/AIROHA-AN7581.txt` / `Config/AIROHA-AN7583.txt` 内置 `iptables-nft`、`ip6tables-nft`、`ipset`、`iptables-mod-conntrack-extra`、`iptables-mod-ipopt`，`Scripts/Settings.sh` 在 airoha 的 `target/linux/airoha/config-6.18` 里把 `CONFIG_NETFILTER_XTABLES` / `CONFIG_IP_NF_IPTABLES` / `CONFIG_IP6_NF_IPTABLES` / `CONFIG_IP_SET` 打开（上游默认全关，不开则上述 kmod 在 menuconfig 里不可选）。mwan3 本体与 LuCI 前端不编，用户自行安装；与 fw4、tailscale 的 `ip nat`/`ip mangle` 表可共存，mark 位不要改 mwan3 默认的 `0x3F00` 段。
 - **仅内置运行依赖**：dae、honk、clouddrive2 只编入运行依赖（`ca-bundle`、`kmod-sched-bpf`、`jsonfilter`、`sqlite3-cli`、`usign`、`fuse-utils` 等），本体由用户后期自行安装。
 - **菜单修补**：`Scripts/Handles.sh` 修正 argon 主题配色、aurora 菜单、vantage 进度条字体，以及 mini-diskmanager、natmapt 的菜单位置。
 
